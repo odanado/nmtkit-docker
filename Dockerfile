@@ -31,7 +31,7 @@ RUN git clone https://github.com/clab/dynet.git $DYNET_PATH && \
     cd $DYNET_PATH && \
     mkdir build && cd build && \
     cmake .. -DEIGEN3_INCLUDE_DIR=/usr/local/include/eigen/ -DBACKEND=cuda && \
-    make -j 8 && \
+    make && \
     make install && \
     ldconfig && \
     make clean
@@ -43,5 +43,5 @@ RUN git clone https://github.com/odanado/nmtkit.git $NMTKIT_PATH && \
     git submodule update && \
     autoreconf -i && \
     ./configure --with-eigen=$EIGEN_PATH --with-dynet=$DYNET_PATH --with-cuda=$CUDA_PATH && \
-    make -j 8
+    make
 
