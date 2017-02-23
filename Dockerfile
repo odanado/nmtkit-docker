@@ -15,7 +15,8 @@ RUN apt install -y \
     mercurial  \
     autotools-dev \
     dh-autoreconf \
-    cmake
+    cmake && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 ENV EIGEN_PATH /usr/local/include/eigen
 ENV DYNET_PATH /usr/local/src/dynet
@@ -25,7 +26,6 @@ ENV NMTKIT_PATH /usr/local/src/nmtkit
 WORKDIR /usr/local/include
 RUN hg clone https://bitbucket.org/eigen/eigen/ $EIGEN_PATH
 
-ENV DYNET_SHA1 b154988b4b813056a2056ded3facc4a3dbcfcff7
 WORKDIR /usr/local/src/
 RUN git clone https://github.com/clab/dynet.git $DYNET_PATH && \
     cd $DYNET_PATH && \
@@ -33,12 +33,12 @@ RUN git clone https://github.com/clab/dynet.git $DYNET_PATH && \
     cmake .. -DEIGEN3_INCLUDE_DIR=/usr/local/include/eigen/ -DBACKEND=cuda && \
     make -j 8 && \
     make install && \
-    ldconfig
+    ldconfig && \
+    make clean
 
 RUN git clone https://github.com/odanado/nmtkit.git $NMTKIT_PATH && \
     cd $NMTKIT_PATH && \
     git checkout -b remove-dynetcuda remotes/origin/remove-dynetcuda && \
-    cd $NMTKIT_PATH && \
     git submodule init && \
     git submodule update && \
     autoreconf -i && \
